@@ -1,0 +1,17 @@
+{
+	"jobs": [
+		{
+			"name": "hello_01",
+			"script": "./hello_01.sh",
+			"options": {
+			}
+		},
+		{
+			"name": "hello_02",
+			"script": "./hello_02.sh",
+			"options": {
+				"-hold_jid": "$$PREVIOUS_JOB_ID"
+			}
+		}
+	]
+}
