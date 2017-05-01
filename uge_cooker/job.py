@@ -5,8 +5,8 @@ import re
 class Job:
 
 
-	def __init__(self, raw, cwd):
-		self.script = os.path.join(cwd, raw["script"])
+	def __init__(self, raw, cwd, recipe_dir):
+		self.script = os.path.join(recipe_dir, raw["script"])
 		self.work_dir = os.path.join(cwd, raw["name"])
 		self.options = {
 			"-cwd": None,
