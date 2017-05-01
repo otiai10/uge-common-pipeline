@@ -5,9 +5,9 @@ import re
 class Job:
 
 
-	def __init__(self, raw, cwd, recipe_dir):
+	def __init__(self, raw, work_dir, recipe_dir):
 		self.script = os.path.join(recipe_dir, raw["script"])
-		self.work_dir = os.path.join(cwd, raw["name"])
+		self.work_dir = os.path.join(work_dir, raw["name"])
 		self.options = {
 			"-cwd": None,
 			"-o": self.__work_path("stdout.log"),
@@ -20,8 +20,8 @@ class Job:
 		self.__process = None
 
 
-	def __work_path(self, p):
-		return os.path.join(self.work_dir, p)
+	def __work_path(self, file_name):
+		return os.path.join(self.work_dir, file_name)
 
 
 	def build(self, cmd="qsub", prev=None):

@@ -1,15 +1,15 @@
-import json, os
+import json, os, datetime
 from job import Job
 
 class Cooker:
 
 	def __init__(self, env, cwd):
-		if env:
+		if os.path.isfile(env) and env.endswith(".json"):
 			with open(env, "r") as env_file:
 				self.env = json.load(env_file)
 		self.jobs = []
 		self.cwd = cwd
-
+		self.birthtime = datetime.datetime.now()
 
 	def introduce(self):
 		print(dir(self))
@@ -17,6 +17,7 @@ class Cooker:
 
 	def order(self, recipe):
 		self.recipe_dir = os.path.dirname(recipe)
+		self.log_dir    = os.path.join(self.recipe_dir, self.birthtime.strftime("%Y_%m%d_%H%M"))
 		with open(recipe, "r") as recipe_file:
 			raw = json.load(recipe_file)
 			self.__parse(raw)
@@ -24,7 +25,7 @@ class Cooker:
 
 	def __parse(self, raw_recipe):
 		for raw in raw_recipe["jobs"]:
-			self.jobs.append(Job(raw=raw, cwd=self.cwd, recipe_dir=self.recipe_dir))
+			self.jobs.append(Job(raw=raw, work_dir=self.log_dir, recipe_dir=self.recipe_dir))
 
 
 	def cook(self):
