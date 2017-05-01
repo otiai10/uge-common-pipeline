@@ -5,6 +5,8 @@ setup(
 	version='0.0.1',
 	packages=find_packages(),
 	entry_points={
-		'console_scripts': 'uge_cooker = uge_cooker.main:cooker_main'
+		'console_scripts': [
+			'uge_cooker = uge_cooker.main:cooker_main',
+		]
 	},
 )
