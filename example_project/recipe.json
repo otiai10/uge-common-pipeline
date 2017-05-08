@@ -20,7 +20,13 @@
 				"-hold_jid": "$$PREVIOUS_JOB_ID",
 				"-t": "4:8"
 			}
+		},
+		{
+			"name": "hello_04",
+			"script": "./hello_04.sh",
+			"options": {
+				"-hold_jid": "$$PREVIOUS_JOB_ID"
+			}
 		}
-
 	]
 }

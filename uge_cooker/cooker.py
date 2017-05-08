@@ -4,6 +4,7 @@ from job import Job
 class Cooker:
 
 	def __init__(self, env, cwd):
+		self.env = {}
 		if os.path.isfile(env) and env.endswith(".json"):
 			with open(env, "r") as env_file:
 				self.env = json.load(env_file)
@@ -25,13 +26,15 @@ class Cooker:
 
 	def __parse(self, raw_recipe):
 		for raw in raw_recipe["jobs"]:
-			self.jobs.append(Job(raw=raw, work_dir=self.log_dir, recipe_dir=self.recipe_dir))
+			job = Job(raw=raw, work_dir=self.log_dir, recipe_dir=self.recipe_dir, env=self.env)
+			self.jobs.append(job)
 
 
-	def cook(self):
+	def cook(self, verbose=False):
 		for i, job in enumerate(self.jobs):
 			prev = self.jobs[i - 1] if self.jobs[i - 1].id is not None else None
 			job.submit(prev)
+			if verbose: print(job.inspect())
 
 
 	def report(self):

@@ -40,8 +40,8 @@ def cooker_main(argv = []):
 		return
 	cooker = Cooker(args.env, os.getcwd())
 	cooker.order(args.recipe)
-	cooker.introduce()
-	cooker.cook()
+	# cooker.introduce()
+	cooker.cook(args.verbose)
 
 if __name__ == "__main__":
 	cooker_main(sys.argv[1:])
