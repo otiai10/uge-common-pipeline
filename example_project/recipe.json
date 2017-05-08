@@ -12,6 +12,15 @@
 			"options": {
 				"-hold_jid": "$$PREVIOUS_JOB_ID"
 			}
+		},
+		{
+			"name": "hello_03",
+			"script": "./hello_03.sh",
+			"options": {
+				"-hold_jid": "$$PREVIOUS_JOB_ID",
+				"-t": "4:8"
+			}
 		}
+
 	]
 }
