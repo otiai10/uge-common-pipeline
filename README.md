@@ -33,3 +33,9 @@ $ uge_cooker --recipe your_recipe.json
   ]
 }
 ```
+
+For more information
+
+```sh
+$ uge_cooker --recipe recipe.json --env env.json --verbose
+```
