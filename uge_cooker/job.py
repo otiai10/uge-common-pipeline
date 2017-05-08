@@ -41,5 +41,5 @@ class Job:
 		self.__process = subprocess.Popen(self.build(prev=prev), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		(out, err) = self.__process.communicate()
 		self.status = self.__process.returncode
-		m = re.search(" (?P<job_id>[0-9]+) ", out)
+		m = re.search(" (?P<job_id>[0-9]+)[.0-9:\-]* ", out)
 		self.id = m.group("job_id") if m is not None else None
