@@ -42,6 +42,7 @@ def cooker_main(argv = []):
 	cooker.order(args.recipe)
 	# cooker.introduce()
 	cooker.cook(args.verbose)
+	cooker.report()
 
 if __name__ == "__main__":
 	cooker_main(sys.argv[1:])
