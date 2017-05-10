@@ -18,7 +18,7 @@ class Cooker:
 
 	def order(self, recipe):
 		self.recipe_dir = os.path.dirname(recipe)
-		self.log_dir    = os.path.join(self.recipe_dir, self.birthtime.strftime("%Y_%m%d_%H%M"))
+		self.log_dir    = os.path.join(self.recipe_dir, "logs", self.birthtime.strftime("%Y_%m%d_%H%M"))
 		with open(recipe, "r") as recipe_file:
 			raw = json.load(recipe_file)
 			self.__parse(raw)
@@ -26,7 +26,7 @@ class Cooker:
 
 	def __parse(self, raw_recipe):
 		for raw in raw_recipe["jobs"]:
-			job = Job(raw=raw, work_dir=self.log_dir, recipe_dir=self.recipe_dir, env=self.env)
+			job = Job(raw=raw, log_dir=self.log_dir, recipe_dir=self.recipe_dir, env=self.env)
 			self.jobs.append(job)
 
 

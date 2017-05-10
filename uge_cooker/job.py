@@ -5,9 +5,9 @@ import re
 class Job:
 
 
-	def __init__(self, raw, work_dir, recipe_dir, env):
+	def __init__(self, raw, log_dir, recipe_dir, env):
 		self.script = os.path.join(recipe_dir, raw["script"])
-		self.work_dir = os.path.join(work_dir, raw["name"])
+		self.work_dir = os.path.join(log_dir, raw["name"])
 		self.options = {
 			"-cwd": None,
 			"-o": self.__work_path("stdout.log"),
