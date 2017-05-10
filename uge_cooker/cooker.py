@@ -41,4 +41,4 @@ class Cooker:
 		ok = len(filter(lambda j: j.status == 0, self.jobs))
 		ng = len(self.jobs) - ok
 		print("REPORT: {} jobs are submitted successfully, with {} error(s).".format(ok, ng))
-		print("FYI-> tail -f {}/*/*".format(self.log_dir.replace(self.cwd, ".")))
+		print("FYI-> uge_cooker -t {}".format(self.recipe_dir.replace(self.cwd, ".")))
