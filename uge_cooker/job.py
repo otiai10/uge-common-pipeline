@@ -22,6 +22,10 @@ class Job:
 		self.prev    = None
 		self.__process = None
 
+		os.makedirs(self.work_dir)
+		os.mknod(self.options["-o"])
+		os.mknod(self.options["-e"])
+
 
 	def __work_path(self, file_name):
 		return os.path.join(self.work_dir, file_name)
