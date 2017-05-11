@@ -2,18 +2,16 @@
 
 Univa Grid Engine Recipe Cooker
 
-# Installation
+# Why?
 
-```sh
-$ pip install git+https://github.com/otiai10/uge_cooker.git
-$ which uge_cooker
-```
+- bad to handle envs and options in script files
+	- good to separate operations and project-specific things
+- bad to execute duplicate commands to follow logs
+	- good to just hit the same command for each project to follow logs
+- bad to specify job names only to deal `-hold_jid`
+	- good to autommatically generate `-hold_jid`
 
-# Usage
-
-```sh
-$ uge_cooker --recipe your_recipe.json
-```
+# Example
 
 ```json
 {
@@ -34,8 +32,38 @@ $ uge_cooker --recipe your_recipe.json
 }
 ```
 
-For more information
+then
 
 ```sh
-$ uge_cooker --recipe recipe.json --env env.json --verbose
+$ uge_cooker --recipe your_recipe.json
 ```
+
+# Installation
+
+```sh
+$ pip install git+https://github.com/otiai10/uge_cooker.git
+$ which uge_cooker
+```
+
+# Basic Usage
+
+```sh
+uge_cooker -r recipe.json -E env.json
+```
+
+# Tail mode
+
+to follow tails of logs in current directory (where recipe.json is placed)
+
+```sh
+uge_cooker -t .
+```
+
+# Options
+
+| option | value | description |
+|:-------:|:-------:|:-----------:|
+| -t,--tail | **required, if provided** | Execute `tail -f logs/**/*/*` to follow logs, would abort any options else |
+| -r,--recipe | **required, if provided** | Recipe json file path, which specifies operation details, must be `.json` |
+| -E,--env    | optional default ` ` | Specify env json file path, which specifies env vars, must be `.json` if provided |
+| -v,--verbose | optional, no value | Turn on verbose logs of what commands are exactly executed |
