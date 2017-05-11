@@ -1,6 +1,8 @@
 import json, os, datetime
 from job import Job
 
+import message
+
 class Cooker:
 
 	def __init__(self, env, cwd):
@@ -40,5 +42,6 @@ class Cooker:
 	def report(self):
 		ok = len(filter(lambda j: j.status == 0, self.jobs))
 		ng = len(self.jobs) - ok
-		print("REPORT: {} jobs are submitted successfully, with {} error(s).".format(ok, ng))
-		print("FYI-> uge_cooker -t {}".format(self.recipe_dir.replace(self.cwd, ".")))
+		s = "REPORT: {} jobs are submitted successfully, with {} error(s).\n".format(ok, ng)
+		if ng is 0: message.green(s)
+		else: message.red(s)

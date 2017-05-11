@@ -2,6 +2,8 @@ import os, sys, getopt, re, subprocess
 from collections import namedtuple
 from cooker import Cooker
 
+import message
+
 class Args:
 
 	def __init__(self, opts):
@@ -64,6 +66,10 @@ def cooker_main(argv = []):
 	# cooker.introduce()
 	cooker.cook(args.verbose)
 	cooker.report()
+
+	message.white("Do you want to follow tails of logs now? Y/n: ")
+	x = sys.stdin.readline().strip()
+	if x == "y" or x == "Y": return follow_logs(cooker.recipe_dir)
 
 if __name__ == "__main__":
 	cooker_main(sys.argv[1:])
