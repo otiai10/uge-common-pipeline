@@ -11,6 +11,16 @@ Univa Grid Engine Recipe Cooker
 - bad to specify job names only to deal `-hold_jid`
 	- good to autommatically generate `-hold_jid`
 
+# Installation
+
+```sh
+$ pip install git+https://github.com/otiai10/uge_cooker.git
+$ which uge_cooker
+# Try it first!!
+$ uge_cooker -r example_project/recipe.json
+```
+
+
 # Example
 
 ```json
@@ -36,13 +46,6 @@ then
 
 ```sh
 $ uge_cooker --recipe your_recipe.json
-```
-
-# Installation
-
-```sh
-$ pip install git+https://github.com/otiai10/uge_cooker.git
-$ which uge_cooker
 ```
 
 # Basic Usage
