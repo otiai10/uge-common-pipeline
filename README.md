@@ -16,6 +16,9 @@ Univa Grid Engine Recipe Cooker
 ```sh
 $ pip install git+https://github.com/otiai10/uge_cooker.git
 $ which uge_cooker
+```
+
+```sh
 # Try it first!!
 $ git clone https://github.com/otiai10/uge_cooker.git
 $ cd uge_cooker/example_project
