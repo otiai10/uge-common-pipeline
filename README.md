@@ -74,3 +74,6 @@ uge_cooker -t .
 | -r,--recipe | **required, if provided** | Recipe json file path, which specifies operation details, must be `.json` |
 | -E,--env    | optional default ` ` | Specify env json file path, which specifies env vars, must be `.json` if provided |
 | -v,--verbose | optional, no value | Turn on verbose logs of what commands are exactly executed |
+| -S,--slack | optional | Comma separated usernames of you Slack team (1) |
+
+1. To use `--slack` option, you need export 2 env vars `COOKER_SLACK_TOKEN` and `COOKER_SLACK_CHANNEL` to your environment, on which you execute `uge_cooker` command.
