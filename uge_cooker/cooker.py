@@ -2,6 +2,7 @@ import json, os, datetime
 from job import Job
 
 import message
+from templates.final_report import TemplateFinalReport
 
 class Cooker:
 
@@ -20,7 +21,8 @@ class Cooker:
 
 	def order(self, recipe):
 		self.recipe_dir = os.path.dirname(recipe)
-		self.log_dir    = os.path.join(self.recipe_dir, "logs", self.birthtime.strftime("%Y_%m%d_%H%M"))
+		self.log_dir    = os.path.join(self.recipe_dir, "logs", self.birthtime.strftime("%Y_%m%d_%H%M%S"))
+		self._gen_script_dir = os.path.join(self.recipe_dir, "_generated")
 		with open(recipe, "r") as recipe_file:
 			raw = json.load(recipe_file)
 			self.__parse(raw)
@@ -45,3 +47,20 @@ class Cooker:
 		s = "REPORT: {} jobs are submitted successfully, with {} error(s).\n".format(ok, ng)
 		if ng is 0: message.green(s)
 		else: message.red(s)
+
+	def append_slack_report(self, params):
+		if not os.path.isdir(self._gen_script_dir):
+			os.makedirs(self._gen_script_dir)
+		tpl = TemplateFinalReport(token=params.get("token"), channel=params.get("channel"), mention=params.get("mention"))
+		scr = os.path.join(self._gen_script_dir, "final_report_slack.sh")
+		with open(scr, "w+") as f:
+			f.write(tpl.out())
+		raw = {
+			"name": "final_report",
+			"script": "./_generated/final_report_slack.sh",
+			"options": {
+				"-hold_jid": "$$PREVIOUS_JOB_ID"
+			}
+		}
+		job = Job(raw=raw, log_dir=self.log_dir, recipe_dir=self.recipe_dir, env=self.env)
+		self.jobs.append(job)

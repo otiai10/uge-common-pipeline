@@ -103,4 +103,4 @@ ENV/
 *.pileup
 
 # DEVELOPMENT
-env.json
+_generated

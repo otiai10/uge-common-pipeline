@@ -11,11 +11,18 @@ class Args:
 		self.env     = ""
 		self.verbose = False
 		self.tail    = None
+		self.slack   = None
 		for opt, arg in opts:
 			if   opt in ("-r", "--recipe"):  self.recipe  = arg
 			elif opt in ("-E", "--env"):     self.env     = arg 
 			elif opt in ("-v", "--verbose"): self.verbose = True
 			elif opt in ("-t", "--tail"):    self.tail    = arg
+			elif opt in ("-S", "--slack"):
+				self.slack = {
+					"token":   os.getenv("COOKER_SLACK_TOKEN"),
+					"channel": os.getenv("COOKER_SLACK_CHANNEL"),
+					"mention": arg.split(",")
+				}
 		cwd = os.getcwd()
 		self.recipe = os.path.join(cwd, self.recipe)
 		self.env    = os.path.join(cwd, self.env)
@@ -27,12 +34,14 @@ class Args:
 		if self.recipe.endswith(".json") is not True: errors.append(Err("recipe", "recipe file must be json"))
 		# if os.path.isfile(self.env) is not True: errors.append(Err("env", "env file must be provided"))
 		# if self.env.endswith(".json") is not True: errors.append(Err("env", "env file must be json"))
+		if self.slack and not self.slack.get("token"): errors.append(Err("slack", "Environment var \"COOKER_SLACK_TOKEN\" is not defined"))
+		if self.slack and not self.slack.get("channel"): errors.append(Err("slack", "Environment var \"COOKER_SLACK_CHANNEL\" is not defined"))
 		return errors
 
 def parse_args(argv = []):
 	argv = sys.argv[1:] if len(argv) == 0 else argv
-	opts, args = getopt.getopt(argv, "r:E:vt:", [
-		"recipe=", "env=", "verbose", "tail="
+	opts, args = getopt.getopt(argv, "r:E:S:vt:", [
+		"recipe=", "env=", "slack=", "verbose", "tail="
 	])
 	return Args(opts)
 
@@ -64,6 +73,7 @@ def cooker_main(argv = []):
 	cooker = Cooker(args.env, os.getcwd())
 	cooker.order(args.recipe)
 	# cooker.introduce()
+	if args.slack is not None: cooker.append_slack_report(args.slack)
 	cooker.cook(args.verbose)
 	cooker.report()
 
