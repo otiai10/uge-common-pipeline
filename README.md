@@ -70,9 +70,9 @@ uge_cooker -t .
 
 | option | value | description |
 |:-------:|:-------:|:-----------:|
-| -t,--tail | **required, if provided** | Execute `tail -f logs/**/*/*` to follow logs, would abort any options else |
-| -r,--recipe | **required, if provided** | Recipe json file path, which specifies operation details, must be `.json` |
-| -E,--env    | optional default ` ` | Specify env json file path, which specifies env vars, must be `.json` if provided |
+| -t,--tail | **required, if provided** | Execute `tail -f logs/**/*/*` to follow logs,<br>would abort any options else |
+| -r,--recipe | **required, if provided** | Recipe json file path, which specifies operation details,<br> must be `.json` |
+| -E,--env    | optional default ` ` | Specify env json file path, which specifies env vars,<br> must be `.json` if provided |
 | -v,--verbose | optional, no value | Turn on verbose logs of what commands are exactly executed |
 | -S,--slack | optional | Comma separated usernames of you Slack team (1) |
 
