@@ -1,6 +1,7 @@
 import os
 import subprocess
 import re
+import copy
 
 class Job:
 
@@ -21,6 +22,7 @@ class Job:
 		self.id      = None
 		self.prev    = None
 		self.__process = None
+		self.spawn   = int(raw.get("spawn", 0))
 
 		os.makedirs(self.work_dir)
 		os.mknod(self.options["-o"])
@@ -73,3 +75,10 @@ class Job:
 			" \\\n".join(self.build()),
 			"```"
 		]) + "\n"
+
+
+	def replicate(self, index):
+		rep = copy.deepcopy(self)
+		rep.spawn = 0
+		rep.env["COOKER_SPAWN_INDEX"] = index
+		return rep

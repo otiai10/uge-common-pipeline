@@ -3,6 +3,7 @@ from job import Job
 
 import message
 from templates.final_report import TemplateFinalReport
+from templates.sync_spawn import TemplateSyncSpawn
 
 class Cooker:
 
@@ -37,9 +38,23 @@ class Cooker:
 	def cook(self, verbose=False):
 		for i, job in enumerate(self.jobs):
 			prev = self.jobs[i - 1] if self.jobs[i - 1].id is not None else None
-			job.submit(prev)
+			if job.spawn:
+				ids = self.__spawn(parent=job, count=job.spawn, prev=prev)
+				syncer_job = self.__create_spawn_sync(job.name, ids)
+				syncer_job.submit(prev) # TODO: This syncer job would be lost from cooker management :(
+				job.id = syncer_job.id
+				job.status = syncer_job.status
+			else:
+				job.submit(prev)
 			if verbose: print(job.inspect())
 
+	def __spawn(self, parent, count, prev):
+		ids = []
+		for index in range(count):
+			child = parent.replicate(index)
+			child.submit(prev)
+			ids.append(child.id)
+		return ids
 
 	def report(self):
 		ok = len(filter(lambda j: j.status == 0, self.jobs))
@@ -47,6 +62,7 @@ class Cooker:
 		s = "REPORT: {} jobs are submitted successfully, with {} error(s).\n".format(ok, ng)
 		if ng is 0: message.green(s)
 		else: message.red(s)
+
 
 	def append_slack_report(self, params):
 		if not os.path.isdir(self._gen_script_dir):
@@ -64,3 +80,21 @@ class Cooker:
 		}
 		job = Job(raw=raw, log_dir=self.log_dir, recipe_dir=self.recipe_dir, env=self.env)
 		self.jobs.append(job)
+
+
+	def __create_spawn_sync(self, parent_name, ids):
+		if not os.path.isdir(self._gen_script_dir):
+			os.makedirs(self._gen_script_dir)
+		tpl = TemplateSyncSpawn(parent_name=parent_name, ids=ids, sleep=20)
+		name = "spawn_sync_{}".format(parent_name)
+		scr = os.path.join(self._gen_script_dir, name + ".sh")
+		with open(scr, "w+") as f:
+			f.write(tpl.out())
+		raw = {
+			"name":    name,
+			"script": "./_generated/{}.sh".format(name),
+			"options": {
+				"-hold_jid": "$$PREVIOUS_JOB_ID"
+			}
+		}
+		return Job(raw=raw, log_dir=self.log_dir, recipe_dir=self.recipe_dir, env=self.env)
