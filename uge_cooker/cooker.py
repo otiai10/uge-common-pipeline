@@ -51,7 +51,7 @@ class Cooker:
 	def append_slack_report(self, params):
 		if not os.path.isdir(self._gen_script_dir):
 			os.makedirs(self._gen_script_dir)
-		tpl = TemplateFinalReport(token=params.get("token"), channel=params.get("channel"), mention=params.get("mention"))
+		tpl = TemplateFinalReport(cooker=self, token=params.get("token"), channel=params.get("channel"), mention=params.get("mention"))
 		scr = os.path.join(self._gen_script_dir, "final_report_slack.sh")
 		with open(scr, "w+") as f:
 			f.write(tpl.out())

@@ -3,13 +3,15 @@ defines a template to report after all jobs get done
 '''
 
 class TemplateFinalReport(object):
-	def __init__(self, token="", channel="random", mention=[]):
+	def __init__(self, cooker, token="", channel="random", mention=[]):
+		self.cooker = cooker
 		self.token = token
 		self.channel = channel
 		self.mention = ", ".join(map(lambda s: "%20%40{}".format(s), mention)) if mention else ""
 
 	def out(self):
-		return self.template().format(token=self.token, channel=self.channel, mention=self.mention)
+		log_dir = self.cooker.log_dir.replace(self.cooker.cwd, ".")
+		return self.template().format(log_dir=log_dir, token=self.token, channel=self.channel, mention=self.mention)
 
 	@staticmethod
 	def template():
@@ -23,12 +25,13 @@ class TemplateFinalReport(object):
 
 #$ -S /bin/sh
 
+TAIL=`tail -n 12 {log_dir}/*/*.log`
 TEXT="Hey{mention}, your jobs are all done! Check it out now!!"
 
 curl -XPOST "https://slack.com/api/chat.postMessage" \
 -d "token={token}" \
 -d "channel={channel}" \
 -d "link_names=1" \
--d "text=$TEXT"
+-d "text=$TEXT\n\n\`\`\`\n$TAIL\n\`\`\`\n"
 
 """[1:-1]
