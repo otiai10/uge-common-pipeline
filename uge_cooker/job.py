@@ -43,6 +43,9 @@ class Job:
 
 	def __build_options(self, prev=None):
 		prev = prev if prev is not None else self.prev
+
+		if prev is not None: self.options["-hold_jid"] = "$$PREVIOUS_JOB_ID"
+
 		replace = (lambda s: s.replace("$$PREVIOUS_JOB_ID", prev.id)) if prev is not None else (lambda s: s)
 		pool = []
 		for key, val in self.options.iteritems():
