@@ -4,7 +4,10 @@ import re
 import copy
 
 class Job:
-
+	"""
+	Job class represents 1 job described in described in `recipe.json` "jobs" field.
+	This means, therefore, 1 recipe has many jobs inside.
+	"""
 
 	def __init__(self, raw, log_dir, recipe_dir, env):
 		self.script = os.path.join(recipe_dir, raw["script"])
