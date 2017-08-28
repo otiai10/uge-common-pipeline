@@ -11,13 +11,14 @@ class Job:
 
 	def __init__(self, raw, log_dir, recipe_dir, env):
 		self.script = os.path.join(recipe_dir, raw["script"])
-		self.work_dir = os.path.join(log_dir, raw["name"])
+		self.name     = raw.get("name", os.path.splitext(os.path.basename(self.script))[0])
+		self.work_dir = os.path.join(log_dir, self.name)
 		self.options = {
 			"-cwd": None,
 			"-o": self.__work_path("stdout.log"),
 			"-e": self.__work_path("stderr.log"),
+			"-N": self.name,
 		}
-		self.name    = raw["name"]
 		self.options.update(raw.get("options", {}))
 		self.env = env if env is not None else {}
 		self.status  = None

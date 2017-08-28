@@ -1,7 +1,6 @@
 {
 	"jobs": [
 		{
-			"name": "hello_01",
 			"script": "./hello_01.sh",
 			"spawn": 10
 		},
