@@ -3,8 +3,6 @@
 		{
 			"name": "hello_01",
 			"script": "./hello_01.sh",
-			"options": {
-			},
 			"spawn": 10
 		},
 		{

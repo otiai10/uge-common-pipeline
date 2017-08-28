@@ -18,7 +18,7 @@ class Job:
 			"-e": self.__work_path("stderr.log"),
 		}
 		self.name    = raw["name"]
-		self.options.update(raw["options"])
+		self.options.update(raw.get("options", {}))
 		self.env = env if env is not None else {}
 		self.status  = None
 		self.error   = ""
